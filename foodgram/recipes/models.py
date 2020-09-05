@@ -10,7 +10,7 @@ class Ingredient(models.Model):
 
 
 class RecipeIngredients(models.Model):
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    amount = models.DecimalField(max_digits=7, decimal_places=2, null=True)
     ingredient = models.ForeignKey('Ingredient', on_delete=models.CASCADE)
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
 

@@ -25,6 +25,10 @@ class RecipeCreationView(FormView):
         items = zip(names, values)
         for item in items:
             ingredient = Ingredient.objects.get(name=item[0])
-            RecipeIngredients.objects.create(amount=int(item[1]), recipe=recipe, ingredient=ingredient)
+            RecipeIngredients.objects.create(
+                amount=int(item[1]) if item[1] else None,
+                recipe=recipe,
+                ingredient=ingredient
+            )
 
         return redirect(self.success_url)

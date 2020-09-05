@@ -19,11 +19,16 @@ function Ingredients() {
             nameIngredient.value = e.target.textContent;
             formDropdownItems.style.display = ''
             cantidadVal.textContent = e.target.getAttribute('data-val');
+            console.log(cantidadVal.textContent)
+            if (cantidadVal.textContent === "по вкусу")
+                cantidad.disabled = true;
+            else
+                cantidad.disabled = false;
         }
     };
     // Добавление элемента из инпута
     const addIngredient = (e) => {
-        if(nameIngredient.value && cantidad.value) {
+        if(nameIngredient.value && (cantidad.value || cantidadVal.textContent === "по вкусу")) {
             const data = getValue();
             const elem = document.createElement('div');
             elem.classList.add('form__field-item-ingredient');
