@@ -6,6 +6,8 @@ const formDropdownItems = document.querySelector('.form__dropdown-items');
 const cantidadVal = document.querySelector('#cantidadVal');
 const cantidad = document.querySelector('#cantidad')
 const addIng = document.querySelector('#addIng');
+const photoFilename = document.querySelector('#photoFilename');
+const photoInput = document.querySelector('#id_file');
 
 const api = new Api(apiUrl);
 //const header = new Header(counterId);
@@ -87,6 +89,11 @@ const cbEventInput = (elem) => {
         console.log(e)
     })
 };
+
+const fileChanged = (elem) => {
+    photoFilename.textContent = elem.target.value.replace(/^.*[\\\/]/, '');
+}
+photoInput.addEventListener('change', fileChanged);
 
 const eventInput = debouncing(cbEventInput, 1000);
 

@@ -80,6 +80,7 @@
                 <div class="form__field-group">
                     <label for="id_file" class="form__file-button">Выбрать файл</label>
                     <input type="file" class="form__file" name="photo" id="id_file" accept="image/*">
+                    <span id="photoFilename" class="form__label" style="max-width: unset"></span>
                     {% if form.errors.photo %}
                     <span class="form__error">{{ form.errors.photo }}</span>
                     {% endif %}
