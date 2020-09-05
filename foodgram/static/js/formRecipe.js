@@ -8,7 +8,7 @@ const cantidad = document.querySelector('#cantidad')
 const addIng = document.querySelector('#addIng');
 
 const api = new Api(apiUrl);
-const header = new Header(counterId);
+//const header = new Header(counterId);
 
 
 function Ingredients() {

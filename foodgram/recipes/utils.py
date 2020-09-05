@@ -37,3 +37,9 @@ russian_alphabet = {
 
 def russian_slugify(text):
     return slugify("".join(russian_alphabet.get(s, s) for s in text.lower()))
+
+
+def filter_by_key(obj, query):
+    """Return values from dict `obj` which keys start with `query`"""
+    filtered_items = filter(lambda e: e[0].startswith(query), obj.items())
+    return [v for k, v in filtered_items]

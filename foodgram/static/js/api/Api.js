@@ -4,7 +4,7 @@ class Api {
         this.apiUrl =  apiUrl;
     }
   getPurchases () {
-    return fetch(`/purchases`, {
+    return fetch(apiUrl + `/purchases`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -110,7 +110,7 @@ class Api {
         })
   }
     getIngredients  (text)  {
-        return fetch(`/ingredients?query=${text}`, {
+        return fetch(apiUrl + `/ingredients?query=${text}`, {
             headers: {
                 'Content-Type': 'application/json'
             }

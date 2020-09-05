@@ -5,7 +5,8 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
-    path('recipes/', include('recipes.urls'))
+    path('recipes/', include('recipes.urls')),
+    path('api/', include('api.urls'))
 ]
 
 if settings.DEBUG:

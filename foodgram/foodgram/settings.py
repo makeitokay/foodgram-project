@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'recipes',
     'accounts',
     'debug_toolbar',
+    'rest_framework',
 ]
 
 INTERNAL_IPS = [
