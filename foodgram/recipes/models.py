@@ -1,22 +1,23 @@
 from django.db import models
 from django.conf import settings
 
-from foodgram.recipes.utils import russian_slugify
+from .utils import russian_slugify
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=70)
     unit = models.CharField(max_length=10)
 
 
 class RecipeIngredients(models.Model):
-    amount = models.DecimalField()
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
     ingredient = models.ForeignKey('Ingredient', on_delete=models.CASCADE)
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
 
 
 class Tag(models.Model):
     name = models.CharField(max_length=15)
+    display_name = models.CharField(max_length=30)
 
 
 class Recipe(models.Model):
@@ -29,6 +30,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
+        null=True,
         related_name="recipes",
     )
     name = models.CharField(max_length=60)
