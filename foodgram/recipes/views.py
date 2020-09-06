@@ -9,7 +9,7 @@ from .utils import filter_by_key
 
 class RecipeCreationView(LoginRequiredMixin, FormView):
     form_class = RecipeCreationForm
-    template_name = 'recipe_creation.html'
+    template_name = 'formRecipe.html'
     success_url = '/'
 
     def form_valid(self, form):
