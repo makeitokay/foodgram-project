@@ -42,3 +42,16 @@ class RecipeListView(ListView):
     context_object_name = 'recipes'
     template_name = 'index.html'
     paginate_by = 6
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] = self.request.GET.get('tags', '')
+        return context
+
+    def get_queryset(self):
+        tags = self.request.GET.get('tags', '')
+        if tags:
+            queryset = Recipe.objects.filter(tags__name__in=tags.split(',')).distinct()
+        else:
+            queryset = Recipe.objects.all()
+        return queryset.order_by('-id').all()

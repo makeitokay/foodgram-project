@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load get_tags_param %}
 
 {% block title %} Рецепты {% endblock %}
 {% block styles %} <link rel="stylesheet" href="{% static 'pages/index.css' %}"> {% endblock %}
@@ -10,20 +11,20 @@
     <ul class="tags">
         <li class="tags__item">
             <a id="breakfast"
-               class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active"
-               href="#"></a>
+               class="tags__checkbox tags__checkbox_style_orange {% if 'breakfast' in tags %} tags__checkbox_active {% endif %}"
+               href="?tags={{ request|get_tags_param:'breakfast' }}"></a>
             <span class="tags__label">Завтрак</span>
         </li>
         <li class="tags__item">
             <a id="lunch"
-               class="tags__checkbox tags__checkbox_style_green tags__checkbox_active"
-               href="#"></a>
+               class="tags__checkbox tags__checkbox_style_green {% if 'lunch' in tags %} tags__checkbox_active {% endif %}"
+               href="?tags={{ request|get_tags_param:'lunch' }}"></a>
             <span for="lunch" class="tags__label">Обед</span>
         </li>
         <li class="tags__item">
             <a id="dinner"
-               class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active"
-               href="#"></a>
+               class="tags__checkbox tags__checkbox_style_purple {% if 'dinner' in tags %} tags__checkbox_active {% endif %}"
+               href="?tags={{ request|get_tags_param:'dinner' }}"></a>
             <label for="dinner" class="tags__label">Ужин</label>
         </li>
     </ul>
@@ -37,7 +38,7 @@
         <div class="card__body">
             <a class="card__title link" href="#" target="_blank">{{ recipe.name }}</a>
             <ul class="card__items">
-                {% for tag in recipe.tag %}
+                {% for tag in recipe.tags.all %}
                 <li class="card__item"><span
                         class="badge badge_style_{{ tag.display_color }}">{{ tag.display_name }}</span>
                 </li>
@@ -69,21 +70,21 @@
     <ul class="pagination__container">
 
         {% if page_obj.has_previous %}
-        <li class="pagination__item"><a class="pagination__link link" href="#"><span
-                class="icon-left"></span></a></li>
+        <li class="pagination__item"><a class="pagination__link link" href="?page={{ page_obj.previous_page_number }}{% if tags %}&tags={{ tags }}{% endif %}">
+            <span class="icon-left"></span></a></li>
         {% endif %}
 
         {% for i in paginator.page_range %}
             {% if page_obj.number == i %}
                 <li class="pagination__item pagination__item_active"><a
-                class="pagination__link link" href="?page={{ i }}">{{ i }}</a></li>
+                class="pagination__link link" href="?page={{ i }}{% if tags %}&tags={{ tags }}{% endif %}">{{ i }}</a></li>
             {% else %}
-                <li class="pagination__item"><a class="pagination__link link" href="?page={{ i }}">{{ i }}</a>
+                <li class="pagination__item"><a class="pagination__link link" href="?page={{ i }}{% if tags %}&tags={{ tags }}{% endif %}">{{ i }}</a>
             {% endif %}
         {% endfor %}
 
         {% if page_obj.has_next %}
-            <li class="pagination__item"><a class="pagination__link link" href="?page={{ page_obj.next_page_number }}"><span
+            <li class="pagination__item"><a class="pagination__link link" href="?page={{ page_obj.next_page_number }}{% if tags %}&tags={{ tags }}{% endif %}"><span
                 class="icon-right"></span></a></li>
         {% endif %}
 
