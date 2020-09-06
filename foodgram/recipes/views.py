@@ -54,4 +54,4 @@ class RecipeListView(ListView):
             queryset = Recipe.objects.filter(tags__name__in=tags.split(',')).distinct()
         else:
             queryset = Recipe.objects.all()
-        return queryset.order_by('-id').all()
+        return queryset.order_by('-id').prefetch_related('author', 'tags').all()
