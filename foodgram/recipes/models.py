@@ -18,6 +18,7 @@ class RecipeIngredients(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=15)
     display_name = models.CharField(max_length=30)
+    display_color = models.CharField(max_length=30)
 
 
 class Recipe(models.Model):
@@ -34,7 +35,7 @@ class Recipe(models.Model):
         related_name="recipes",
     )
     name = models.CharField(max_length=60)
-    photo = models.ImageField(upload_to='recipes/')
+    photo = models.ImageField(upload_to='recipes/', default='default.png', null=False)
     description = models.TextField()
     ingredients = models.ManyToManyField('Ingredient', related_name='recipes',
                                          through='RecipeIngredients')
