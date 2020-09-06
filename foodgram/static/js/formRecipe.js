@@ -10,7 +10,7 @@ const photoFilename = document.querySelector('#photoFilename');
 const photoInput = document.querySelector('#id_file');
 
 const api = new Api(apiUrl);
-//const header = new Header(counterId);
+const header = new Header(counterId);
 
 
 function Ingredients() {

@@ -40,5 +40,5 @@ class RecipeCreationView(LoginRequiredMixin, FormView):
 class RecipeListView(ListView):
     model = Recipe
     context_object_name = 'recipes'
-    template_name = 'indexNotAuth.html'
+    template_name = 'index.html'
     paginate_by = 6
