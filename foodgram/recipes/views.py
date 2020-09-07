@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.views.generic import FormView, ListView, UpdateView
+from django.views.generic import FormView, ListView, UpdateView, DetailView
 
 from .forms import RecipeCreationForm
 from .models import Tag, Ingredient, RecipeIngredients, Recipe
@@ -93,3 +93,9 @@ class RecipeUpdateView(LoginRequiredMixin, RecipeAuthorOnlyMixin, UpdateView):
             )
 
         return redirect(self.success_url)
+
+
+class RecipeDetailView(DetailView):
+    model = Recipe
+    template_name = 'singlePage.html'
+    template_name_field = 'recipe'
