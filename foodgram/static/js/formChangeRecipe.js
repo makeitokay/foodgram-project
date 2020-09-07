@@ -9,13 +9,14 @@ const addIng = document.querySelector('#addIng');
 const photoFilename = document.querySelector('#photoFilename');
 const photoInput = document.querySelector('#id_file');
 const deleteIngredientButtons = document.querySelectorAll('.form__field-item-delete')
+const existingIngredients = document.querySelectorAll('.form__field-item-ingredient');
 
 const api = new Api(apiUrl);
 const header = new Header(counterId);
 
 
 function Ingredients() {
-    let cur = 1;
+    let cur = existingIngredients.length + 1;
     // клик по элементам с сервера
     const dropdown = (e) => {
         if (e.target.classList.contains('form__item-list')) {

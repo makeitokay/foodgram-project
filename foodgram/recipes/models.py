@@ -11,8 +11,8 @@ class Ingredient(models.Model):
 
 class RecipeIngredients(models.Model):
     amount = models.DecimalField(max_digits=7, decimal_places=2, null=True)
-    ingredient = models.ForeignKey('Ingredient', on_delete=models.CASCADE)
-    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
+    ingredient = models.ForeignKey('Ingredient', on_delete=models.CASCADE, related_name='ingredient_amounts')
+    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, related_name='ingredient_amounts')
 
 
 class Tag(models.Model):

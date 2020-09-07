@@ -1,10 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.views.generic import FormView, ListView
+from django.views.generic import FormView, ListView, UpdateView
 
 from .forms import RecipeCreationForm
 from .models import Tag, Ingredient, RecipeIngredients, Recipe
 from .utils import filter_by_key
+from .mixins import RecipeAuthorOnlyMixin
 
 
 class RecipeCreationView(LoginRequiredMixin, FormView):
@@ -13,7 +14,6 @@ class RecipeCreationView(LoginRequiredMixin, FormView):
     success_url = '/'
 
     def form_valid(self, form):
-        print(form.data)
         # Поля author, name, photo, description, cooking_time сохранятся тут
         recipe = form.save(commit=False)
         recipe.author = self.request.user
@@ -29,7 +29,7 @@ class RecipeCreationView(LoginRequiredMixin, FormView):
         for item in items:
             ingredient = Ingredient.objects.get(name=item[0])
             RecipeIngredients.objects.create(
-                amount=int(item[1]) if item[1] else None,
+                amount=round(float(item[1].replace(',', '.')), 2) if item[1] else None,
                 recipe=recipe,
                 ingredient=ingredient
             )
@@ -55,3 +55,41 @@ class RecipeListView(ListView):
         else:
             queryset = Recipe.objects.all()
         return queryset.order_by('-id').prefetch_related('author', 'tags').all()
+
+
+class RecipeUpdateView(LoginRequiredMixin, RecipeAuthorOnlyMixin, UpdateView):
+    model = Recipe
+    template_name = 'formChangeRecipe.html'
+    fields = ('name', 'photo', 'description', 'cooking_time')
+    template_name_field = 'recipe'
+    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tags = [obj[0] for obj in self.object.tags.values_list('name')]
+        context['tags'] = tags
+        return context
+
+    def form_valid(self, form):
+        # Удалим все тэги и ингредиенты, а затем добавим новые
+        recipe = form.save()
+
+        recipe.tags.clear()
+        recipe.ingredient_amounts.all().delete()
+
+        for tag in Tag.objects.all():
+            if form.data.get(tag.name) is not None:
+                recipe.tags.add(tag)
+
+        names = filter_by_key(form.data, 'nameIngredient')
+        values = filter_by_key(form.data, 'valueIngredient')
+        items = zip(names, values)
+        for item in items:
+            ingredient = Ingredient.objects.get(name=item[0])
+            RecipeIngredients.objects.create(
+                amount=round(float(item[1].replace(',', '.')), 2) if item[1] else None,
+                recipe=recipe,
+                ingredient=ingredient
+            )
+
+        return redirect(self.success_url)
