@@ -37,7 +37,7 @@
                 src="{{ recipe.photo.url }}" alt="Какой-то текст"
                 class="card__image"></a>
         <div class="card__body">
-            <a class="card__title link" href="#" target="_blank">{{ recipe.name }}</a>
+            <a class="card__title link" href="{% url 'recipe-detail' pk=recipe.id %}" target="_blank">{{ recipe.name }}</a>
             <ul class="card__items">
                 {% for tag in recipe.tags.all %}
                 <li class="card__item"><span
