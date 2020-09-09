@@ -11,6 +11,7 @@ urlpatterns = [
     path("", RecipeListView.as_view(), name="recipe-list"),
     path("recipes/", include("recipes.urls")),
     path("api/", include("api.urls")),
+    path("account/", include("accounts.urls")),
 ]
 
 if settings.DEBUG:

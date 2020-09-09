@@ -6,7 +6,7 @@
                 {% if user.is_authenticated %}
                 <li class="nav__item"><a href="#" class="nav__link link">Мои подписки</a></li>
                 <li class="nav__item"><a href="{% url 'recipe-creation' %}" class="nav__link link">Создать рецепт</a></li>
-                <li class="nav__item"><a href="#" class="nav__link link">Избранное</a></li>
+                <li class="nav__item"><a href="{% url 'favorite-list' %}" class="nav__link link">Избранное</a></li>
                 <li class="nav__item"><a href="#" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter"></span></li>
                 {% else %}
                 <li class="nav__item nav__item_disabled"><a href="#" class="nav__link link">Список покупок</a></li>
