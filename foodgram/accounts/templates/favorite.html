@@ -29,7 +29,7 @@
                 <p class="card__text"><span class="icon-time"></span>
                     {{ recipe.cooking_time }} мин.</p>
                 <p class="card__text"><span class="icon-user"></span> <a
-                        href="#" style="color: black">
+                        href="{% url 'author-recipe-list' pk=recipe.author.pk %}" style="color: black">
                     {{ recipe.author.username }}
                 </a></p>
             </div>

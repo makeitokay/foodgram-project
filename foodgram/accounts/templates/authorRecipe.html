@@ -1,17 +1,15 @@
 {% extends 'base.html' %}
 
 {% load static %}
-{% load get_tags_param %}
-
 {% block title %} Рецепты {% endblock %}
-{% block styles %} <link rel="stylesheet" href="{% static 'pages/index.css' %}"> {% endblock %}
+{% block styles %} <link rel="stylesheet" href="{% static 'pages/index.css' %}">{% endblock %}
 {% block content %}
-{% csrf_token %}
-<div class="main__header">
-    <h1 class="main__title">Рецепты</h1>
-    {% include 'tags_filter.html' %}
-</div>
-<div class="card-list">
+        <div class="main__header">
+            <h1 class="main__title">{{ recipe.author.username }}</h1>
+            {% include 'tags_filter.html' %}
+        </div>
+        <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" href="#">Подписаться на автора</a></p>
+        <div class="card-list">
     {% for recipe in recipes %}
     <div class="card" data-id="{{ recipe.id }}">
         <a href="{% url 'recipe-detail' pk=recipe.id %}" class="link" target="_blank"><img
@@ -30,7 +28,7 @@
                 <p class="card__text"><span class="icon-time"></span>
                     {{ recipe.cooking_time }} мин.</p>
                 <p class="card__text"><span class="icon-user"></span> <a
-                        href="{% url 'author-recipe-list' pk=recipe.author.pk %}" style="color: black">
+                        href="#" style="color: black">
                     {{ recipe.author.username }}
                 </a></p>
             </div>
@@ -54,18 +52,14 @@
 {% endif %}
 {% endblock %}
 {% block js %}
-<script src="{% static 'js/components/MainCards.js' %}"></script>
+  <script src="{% static 'js/components/MainCards.js' %}"></script>
 
-<script src="{% static 'js/components/Purchpurachases.js' %}"></script>
+  <script src="{% static 'js/components/Purchpurachases.js' %}"></script>
+  <script src="{% static 'js/components/Favorites.js' %}"></script>
 
-<script src="{% static 'js/components/CardList.js' %}"></script>
-<script src="{% static 'js/components/Header.js' %}"></script>
+  <script src="{% static 'js/components/CardList.js' %}"></script>
+  <script src="{% static 'js/components/Header.js' %}"></script>
 
-<script src="{% static 'js/api/Api.js' %}"></script>
-{% if user.is_authenticated %}
-<script src="{% static 'js/components/Favorites.js' %}"></script>
-<script src="{% static 'js/indexAuth.js' %}"></script>
-{% else %}
-<script src="{% static 'js/indexNotAuth.js' %}"></script>
-{% endif %}
+  <script src="{% static 'js/api/Api.js' %}"></script>
+  <script src="{% static 'js/indexAuth.js' %}"></script>
 {% endblock %}
