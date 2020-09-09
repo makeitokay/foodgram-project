@@ -21,20 +21,7 @@ class RecipeCreationView(LoginRequiredMixin, FormView):
         recipe.author = self.request.user
         recipe.save()
         # А тэги и ингредиенты сохраним отдельно как m2m поля
-        for tag in Tag.objects.all():
-            if form.data.get(tag.name) is not None:
-                recipe.tags.add(tag)
-
-        names = filter_by_key(form.data, 'nameIngredient')
-        values = filter_by_key(form.data, 'valueIngredient')
-        items = zip(names, values)
-        for item in items:
-            ingredient = Ingredient.objects.get(name=item[0])
-            RecipeIngredients.objects.create(
-                amount=round(float(item[1].replace(',', '.')), 2) if item[1] else None,
-                recipe=recipe,
-                ingredient=ingredient
-            )
+        recipe.create_m2m_fields(form.data)
 
         return redirect(self.success_url)
 
@@ -79,26 +66,13 @@ class RecipeUpdateView(LoginRequiredMixin, RecipeAuthorOnlyMixin, UpdateView):
         return context
 
     def form_valid(self, form):
-        # Удалим все тэги и ингредиенты, а затем добавим новые
         recipe = form.save()
 
+        # Удалим все тэги и ингредиенты, а затем добавим новые
         recipe.tags.clear()
         recipe.ingredient_amounts.all().delete()
 
-        for tag in Tag.objects.all():
-            if form.data.get(tag.name) is not None:
-                recipe.tags.add(tag)
-
-        names = filter_by_key(form.data, 'nameIngredient')
-        values = filter_by_key(form.data, 'valueIngredient')
-        items = zip(names, values)
-        for item in items:
-            ingredient = Ingredient.objects.get(name=item[0])
-            RecipeIngredients.objects.create(
-                amount=round(float(item[1].replace(',', '.')), 2) if item[1] else None,
-                recipe=recipe,
-                ingredient=ingredient
-            )
+        recipe.create_m2m_fields(form.data)
 
         return redirect(self.success_url)
 

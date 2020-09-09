@@ -3,7 +3,6 @@ from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .permissions import UserAuthorOnlyPermission
 from .serializers import IngredientListSerializer, FavoriteSerializer
 from recipes.models import Ingredient
 from accounts.models import Favorite
