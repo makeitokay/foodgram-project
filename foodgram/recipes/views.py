@@ -7,6 +7,8 @@ from .models import Tag, Ingredient, RecipeIngredients, Recipe
 from .utils import filter_by_key
 from .mixins import RecipeAuthorOnlyMixin
 
+from accounts.models import Favorite
+
 
 class RecipeCreationView(LoginRequiredMixin, FormView):
     form_class = RecipeCreationForm
@@ -45,7 +47,13 @@ class RecipeListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            favorites = [e[0] for e in Favorite.objects.filter(user=self.request.user).values_list('recipe')]
+            context['favorites'] = favorites
+
         context['tags'] = self.request.GET.get('tags', '')
+
         return context
 
     def get_queryset(self):
