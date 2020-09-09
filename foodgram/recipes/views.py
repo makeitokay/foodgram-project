@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.views.generic import FormView, ListView, UpdateView, DetailView
 
 from .forms import RecipeCreationForm
-from .models import Tag, Ingredient, RecipeIngredients, Recipe
-from .utils import filter_by_key
+from .models import Recipe
 from .mixins import RecipeAuthorOnlyMixin
 
 from accounts.models import Favorite
@@ -57,7 +57,6 @@ class RecipeUpdateView(LoginRequiredMixin, RecipeAuthorOnlyMixin, UpdateView):
     template_name = 'formChangeRecipe.html'
     fields = ('name', 'photo', 'description', 'cooking_time')
     template_name_field = 'recipe'
-    success_url = '/'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -74,7 +73,10 @@ class RecipeUpdateView(LoginRequiredMixin, RecipeAuthorOnlyMixin, UpdateView):
 
         recipe.create_m2m_fields(form.data)
 
-        return redirect(self.success_url)
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('recipe-detail', kwargs={'pk': self.object.pk})
 
 
 class RecipeDetailView(DetailView):
