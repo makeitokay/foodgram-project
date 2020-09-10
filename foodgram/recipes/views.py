@@ -83,3 +83,9 @@ class RecipeDetailView(DetailView):
     model = Recipe
     template_name = 'singlePage.html'
     template_name_field = 'recipe'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        is_favorite = Favorite.objects.filter(user=self.request.user, recipe=self.object).exists()
+        context['is_favorite'] = is_favorite
+        return context
