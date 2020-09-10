@@ -12,38 +12,7 @@
 </div>
 <div class="card-list">
     {% for recipe in recipes %}
-    <div class="card" data-id="{{ recipe.id }}">
-        <a href="{% url 'recipe-detail' pk=recipe.id %}" class="link" target="_blank"><img
-                src="{{ recipe.photo.url }}" alt="Какой-то текст"
-                class="card__image"></a>
-        <div class="card__body">
-            <a class="card__title link" href="{% url 'recipe-detail' pk=recipe.id %}" target="_blank">{{ recipe.name }}</a>
-            <ul class="card__items">
-                {% for tag in recipe.tags.all %}
-                <li class="card__item"><span
-                        class="badge badge_style_{{ tag.display_color }}">{{ tag.display_name }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-            <div class="card__items card__items_column">
-                <p class="card__text"><span class="icon-time"></span>
-                    {{ recipe.cooking_time }} мин.</p>
-                <p class="card__text"><span class="icon-user"></span> <a
-                        href="{% url 'author-recipe-list' pk=recipe.author.pk %}" style="color: black">
-                    {{ recipe.author.username }}
-                </a></p>
-            </div>
-        </div>
-        <div class="card__footer">
-            <button class="button button_style_light-blue"
-                    name="purchpurchases" data-out><span
-                    class="icon-plus button__icon"></span>Добавить в покупки
-            </button>
-            <button class="button button_style_none" name="favorites">
-                <span class="icon-favorite icon-favorite_active"></span>
-            </button>
-        </div>
-    </div>
+    {% include 'recipe.html' with recipe=recipe all_favorite=True %}
     {% endfor %}
 </div>
 {% if is_paginated %}
