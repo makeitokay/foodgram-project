@@ -16,5 +16,11 @@ class IngredientListSerializer(serializers.ModelSerializer):
 class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorite
-        fields = '__all__'
+        fields = ('user', 'recipe')
         read_only_fields = ('user',)
+
+    def validate_recipe(self, value):
+        user = self.context['request'].user
+        if Favorite.objects.filter(user=user, recipe=value).exists():
+            return serializers.ValidationError('Favorite already exists')
+        return value

@@ -1,7 +1,8 @@
-from rest_framework import status
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from django.shortcuts import get_object_or_404
 
 from .serializers import IngredientListSerializer, FavoriteSerializer
 from recipes.models import Ingredient
@@ -29,10 +30,6 @@ class CreateFavoriteView(CreateAPIView):
 
 class DestroyFavoriteView(APIView):
     def delete(self, request, pk):
-        try:
-            favorite = Favorite.objects.get(user=request.user, recipe=pk)
-        except Favorite.DoesNotExist:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
+        favorite = get_object_or_404(Favorite, user=request.user, recipe=pk)
         favorite.delete()
         return Response({'success': 'true'})
