@@ -1,7 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
+from django.http import HttpResponse
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import FormView, ListView, UpdateView, DetailView
+from django.views import View
 
 from .forms import RecipeCreationForm
 from .models import Recipe
@@ -91,3 +93,12 @@ class RecipeDetailView(DetailView):
             is_favorite = Favorite.objects.filter(user=self.request.user, recipe=self.object).exists()
             context['is_favorite'] = is_favorite
         return context
+
+
+class RecipeDeleteView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        recipe = get_object_or_404(Recipe, slug=kwargs.get('slug'))
+        if recipe.author != request.user:
+            return HttpResponse(status=403)
+        recipe.delete()
+        return redirect(reverse('recipe-list'))

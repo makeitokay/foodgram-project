@@ -42,7 +42,7 @@
                 </p></li>
                 {% if user == recipe.author %}
                 <li class="single-card__item"><a style="margin-left: 2.5em"
-                                                 href="{% url 'recipe-update' pk=recipe.id %}"
+                                                 href="{% url 'recipe-update' slug=recipe.slug %}"
                                                  class="single-card__text">Редактировать
                     рецепт</a></li>
                 {% endif %}
