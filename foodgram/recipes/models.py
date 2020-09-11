@@ -65,6 +65,8 @@ class Recipe(models.Model):
         values = filter_by_key(form_data, 'valueIngredient')
         # И установим соответствие между ингредиентом и количеством
         items = zip(ingredients, values)
+        # p.s.: приведенная выше схема нужна для того,
+        # чтобы вытащить все нужные ингредиенты одним запросом к БД
 
         recipe_ingredients = []
         for ingredient, amount in items:
@@ -75,4 +77,5 @@ class Recipe(models.Model):
                     ingredient=ingredient
                 )
             )
+        # Также одним запросом создаем все ингредиенты нашего рецепта
         RecipeIngredients.objects.bulk_create(recipe_ingredients)
