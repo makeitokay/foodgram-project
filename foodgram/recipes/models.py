@@ -8,6 +8,9 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=70)
     unit = models.CharField(max_length=10)
 
+    def __str__(self):
+        return self.name
+
 
 class RecipeIngredients(models.Model):
     amount = models.DecimalField(max_digits=7, decimal_places=2, null=True)
@@ -52,13 +55,24 @@ class Recipe(models.Model):
             if form_data.get(tag.name) is not None:
                 self.tags.add(tag)
 
-        names = filter_by_key(form_data, 'nameIngredient')
+        # Сначала получаем имена ингредиентов, затем вытащим объекты
+        ingredients = filter_by_key(form_data, 'nameIngredient')
+        ingredient_objects = Ingredient.objects.filter(name__in=ingredients).all()
+        # В исходном списке имен заменим все имена на объекты
+        for obj in ingredient_objects:
+            ingredients[ingredients.index(obj.name)] = obj
+        # Теперь вытащим значения количества для ингредиентов
         values = filter_by_key(form_data, 'valueIngredient')
-        items = zip(names, values)
-        for item in items:
-            ingredient = Ingredient.objects.get(name=item[0])
-            RecipeIngredients.objects.create(
-                amount=round(float(item[1].replace(',', '.')), 2) if item[1] else None,
-                recipe=self,
-                ingredient=ingredient
+        # И установим соответствие между ингредиентом и количеством
+        items = zip(ingredients, values)
+
+        recipe_ingredients = []
+        for ingredient, amount in items:
+            recipe_ingredients.append(
+                RecipeIngredients(
+                    amount=round(float(amount.replace(',', '.')), 2) if amount else None,
+                    recipe=self,
+                    ingredient=ingredient
+                )
             )
+        RecipeIngredients.objects.bulk_create(recipe_ingredients)

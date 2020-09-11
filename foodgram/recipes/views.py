@@ -76,7 +76,7 @@ class RecipeUpdateView(LoginRequiredMixin, RecipeAuthorOnlyMixin, UpdateView):
         return redirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse('recipe-detail', kwargs={'pk': self.object.pk})
+        return reverse('recipe-detail', kwargs={'slug': self.object.slug})
 
 
 class RecipeDetailView(DetailView):

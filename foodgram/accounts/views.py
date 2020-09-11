@@ -42,8 +42,8 @@ class AuthorRecipeListView(ListView):
             favorites = [e[0] for e in Favorite.objects.filter(user=self.request.user).values_list('recipe')]
             context['favorites'] = favorites
 
-        context['tags'] = self.request.GET.get('tags', '')
         context['author'] = get_object_or_404(User, pk=self.kwargs.get('pk'))
+        context['tags'] = self.request.GET.get('tags', '')
 
         return context
 
