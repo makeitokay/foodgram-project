@@ -9,7 +9,7 @@ from .forms import RecipeCreationForm
 from .models import Recipe
 from .mixins import RecipeAuthorOnlyMixin
 
-from accounts.models import Favorite
+from accounts.models import Favorite, Follow
 
 
 class RecipeCreationView(LoginRequiredMixin, FormView):
@@ -91,7 +91,9 @@ class RecipeDetailView(DetailView):
 
         if self.request.user.is_authenticated:
             is_favorite = Favorite.objects.filter(user=self.request.user, recipe=self.object).exists()
+            is_following = Follow.objects.filter(user=self.request.user, following=self.object.author).exists()
             context['is_favorite'] = is_favorite
+            context['is_following'] = is_following
         return context
 
 

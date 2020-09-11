@@ -4,7 +4,7 @@ class Api {
         this.apiUrl =  apiUrl;
     }
   getPurchases () {
-    return fetch(apiUrl + `/purchases`, {
+    return fetch(apiUrl + `/purchases/`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -17,10 +17,11 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(apiUrl + `/purchases`, {
+    return fetch(apiUrl + `/purchases/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       },
       body: JSON.stringify({
         id: id
@@ -34,10 +35,11 @@ class Api {
       })
   }
   removePurchases (id){
-    return fetch(apiUrl + `/purchases/${id}`, {
+    return fetch(apiUrl + `/purchases/${id}/`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       }
     })
       .then( e => {
@@ -48,13 +50,14 @@ class Api {
       })
   }
   addSubscriptions(id) {
-    return fetch(apiUrl + `/subscriptions`, {
+    return fetch(apiUrl + `/subscriptions/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       },
       body: JSON.stringify({
-        id: id
+        following: id
       })
     })
       .then( e => {
@@ -65,10 +68,11 @@ class Api {
       })
   }
   removeSubscriptions (id) {
-    return fetch(apiUrl + `/subscriptions/${id}`, {
+    return fetch(apiUrl + `/subscriptions/${id}/`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       }
     })
       .then( e => {
@@ -112,7 +116,7 @@ class Api {
         })
   }
     getIngredients  (text)  {
-        return fetch(apiUrl + `/ingredients?query=${text}`, {
+        return fetch(apiUrl + `/ingredients?query=${text}/`, {
             headers: {
                 'Content-Type': 'application/json'
             }

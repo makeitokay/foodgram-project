@@ -4,9 +4,9 @@ from rest_framework.views import APIView
 
 from django.shortcuts import get_object_or_404
 
-from .serializers import IngredientListSerializer, FavoriteSerializer
+from .serializers import IngredientListSerializer, FavoriteSerializer, FollowSerializer
 from recipes.models import Ingredient
-from accounts.models import Favorite
+from accounts.models import Favorite, Follow
 
 
 class IngredientListView(ListAPIView):
@@ -28,8 +28,22 @@ class CreateFavoriteView(CreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class DestroyFavoriteView(APIView):
+class DeleteFavoriteView(APIView):
     def delete(self, request, pk):
         favorite = get_object_or_404(Favorite, user=request.user, recipe=pk)
         favorite.delete()
+        return Response({'success': 'true'})
+
+
+class CreateFollowView(CreateAPIView):
+    serializer_class = FollowSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class DeleteFollowView(APIView):
+    def delete(self, request, pk):
+        follow = get_object_or_404(Follow, user=request.user, following=pk)
+        follow.delete()
         return Response({'success': 'true'})

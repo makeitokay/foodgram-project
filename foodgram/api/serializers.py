@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from recipes.models import Ingredient
-from accounts.models import Favorite
+from accounts.models import Favorite, Follow
 
 
 class IngredientListSerializer(serializers.ModelSerializer):
@@ -23,4 +23,19 @@ class FavoriteSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if Favorite.objects.filter(user=user, recipe=value).exists():
             return serializers.ValidationError('Favorite already exists')
+        return value
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follow
+        fields = ('user', 'following')
+        read_only_fields = ('user',)
+
+    def validate_following(self, value):
+        user = self.context['request'].user
+        if Follow.objects.filter(user=user, following=value).exists():
+            raise serializers.ValidationError("Following already exists")
+        if user == value:
+            raise serializers.ValidationError("You can't follow to yourself")
         return value
