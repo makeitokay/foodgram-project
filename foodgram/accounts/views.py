@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
@@ -58,3 +59,15 @@ class AuthorRecipeListView(ListView):
             queryset = Recipe.objects.all()
         queryset = queryset.filter(author=self.kwargs.get('pk'))
         return queryset.order_by('-id').prefetch_related('author', 'tags').all()
+
+
+class FollowingAuthorsListView(LoginRequiredMixin, ListView):
+    model = User
+    context_object_name = 'authors'
+    template_name = 'myFollow.html'
+    paginate_by = 6
+
+    def get_queryset(self):
+        following = Follow.objects.filter(user=self.request.user).values_list('following', flat=True)
+        authors = User.objects.filter(pk__in=following).annotate(recipe_count=Count('recipes') - 3).all()
+        return authors
