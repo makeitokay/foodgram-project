@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{% static 'pages/single.css' %}"> {% endblock %}
 {% block content %}
 {% csrf_token %}
-<div class="single-card" data-id="{{ recipe.id }}">
+<div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
     <img src="{{ recipe.photo.url }}" alt="какой-то текст"
          class="single-card__image">
     <div class="single-card__info">

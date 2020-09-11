@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %} <link rel="stylesheet" href="{% static 'pages/index.css' %}"> {% endblock %}
+{% block content %}
+<div class="custom-center-block">
+    <p class="custom-text-block">{% block message %}{% endblock %}</p>
+    <div class="custom-button-block">
+        <a href="{% url 'recipe-list' %}"><button class="button button_style_blue">Перейти на главную</button></a>
+    </div>
+</div>
+{% endblock %}

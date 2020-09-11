@@ -86,6 +86,8 @@ class RecipeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        is_favorite = Favorite.objects.filter(user=self.request.user, recipe=self.object).exists()
-        context['is_favorite'] = is_favorite
+
+        if self.request.user.is_authenticated:
+            is_favorite = Favorite.objects.filter(user=self.request.user, recipe=self.object).exists()
+            context['is_favorite'] = is_favorite
         return context

@@ -1,5 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 
 from recipes.models import Recipe
 from .models import Favorite
@@ -41,6 +43,7 @@ class AuthorRecipeListView(ListView):
             context['favorites'] = favorites
 
         context['tags'] = self.request.GET.get('tags', '')
+        context['author'] = get_object_or_404(User, pk=self.kwargs.get('pk'))
 
         return context
 
