@@ -19,7 +19,7 @@ class RecipeIngredients(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=15)
+    name = models.CharField(max_length=15, db_index=True)
     display_name = models.CharField(max_length=30)
     display_color = models.CharField(max_length=30)
 
