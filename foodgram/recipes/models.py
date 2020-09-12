@@ -23,6 +23,9 @@ class Tag(models.Model):
     display_name = models.CharField(max_length=30)
     display_color = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.name
+
 
 class Recipe(models.Model):
     TAG_CHOICES = (
@@ -45,6 +48,9 @@ class Recipe(models.Model):
     tags = models.ManyToManyField('Tag', related_name='recipes')
     cooking_time = models.IntegerField()
     slug = models.SlugField(unique=True, null=False)
+
+    def __str__(self):
+        return self.name
 
     def save(self, *args, **kwargs):
         self.slug = russian_slugify(self.name)
