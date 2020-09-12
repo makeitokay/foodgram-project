@@ -9,8 +9,6 @@ from .forms import RecipeCreationForm
 from .models import Recipe
 from .mixins import RecipeAuthorOnlyMixin
 
-from accounts.models import Favorite, Follow, Purchase
-
 
 class RecipeCreationView(LoginRequiredMixin, FormView):
     form_class = RecipeCreationForm
@@ -38,9 +36,9 @@ class RecipeListView(ListView):
         context = super().get_context_data(**kwargs)
 
         if self.request.user.is_authenticated:
-            favorites = Favorite.objects.filter(user=self.request.user).values_list('recipe', flat=True)
+            favorites = self.request.user.favorites.values_list('recipe', flat=True)
             context['favorites'] = favorites
-            purchases = Purchase.objects.filter(user=self.request.user).values_list('recipe', flat=True)
+            purchases = self.request.user.purchases.values_list('recipe', flat=True)
             context['purchases'] = purchases
 
         context['tags'] = self.request.GET.get('tags', '')
@@ -49,11 +47,8 @@ class RecipeListView(ListView):
 
     def get_queryset(self):
         tags = self.request.GET.get('tags', '')
-        if tags:
-            queryset = Recipe.objects.filter(tags__name__in=tags.split(',')).distinct()
-        else:
-            queryset = Recipe.objects.all()
-        return queryset.order_by('-id').prefetch_related('author', 'tags').all()
+        queryset = Recipe.filter_by_tags(tags)
+        return queryset.order_by('-id').select_related('author').prefetch_related('tags').all()
 
 
 class RecipeUpdateView(LoginRequiredMixin, RecipeAuthorOnlyMixin, UpdateView):
@@ -64,7 +59,7 @@ class RecipeUpdateView(LoginRequiredMixin, RecipeAuthorOnlyMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        tags = [obj[0] for obj in self.object.tags.values_list('name')]
+        tags = self.object.tags.values_list('name', flat=True)
         context['tags'] = tags
         return context
 
@@ -92,10 +87,12 @@ class RecipeDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         if self.request.user.is_authenticated:
-            is_favorite = Favorite.objects.filter(user=self.request.user, recipe=self.object).exists()
-            is_following = Follow.objects.filter(user=self.request.user, following=self.object.author).exists()
+            is_favorite = self.request.user.favorites.filter(recipe=self.object).exists()
+            is_following = self.request.user.following.filter(following=self.object.author).exists()
+            is_purchased = self.request.user.purchases.filter(recipe=self.object).exists()
             context['is_favorite'] = is_favorite
             context['is_following'] = is_following
+            context['is_purchased'] = is_purchased
         return context
 
 

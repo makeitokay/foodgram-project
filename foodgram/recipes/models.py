@@ -49,6 +49,14 @@ class Recipe(models.Model):
     cooking_time = models.IntegerField()
     slug = models.SlugField(unique=True, null=False)
 
+    @staticmethod
+    def filter_by_tags(tags):
+        if tags:
+            queryset = Recipe.objects.filter(tags__name__in=tags.split(',')).distinct()
+        else:
+            queryset = Recipe.objects.all()
+        return queryset
+
     def __str__(self):
         return self.name
 

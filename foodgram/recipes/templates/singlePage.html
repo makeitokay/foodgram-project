@@ -50,12 +50,17 @@
         </div>
         <ul class="single-card__items">
             {% if user.is_authenticated %}
-                <li class="single-card__item">
-                    <button class="button button_style_blue" name="purchpurchases"
-                            data-out><span class="icon-plus"></span> Добавить в
-                        покупки
+                {% if is_purchased %}
+                    <button class="button button_style_light-blue-outline"
+                        name="purchpurchases">
+                        <span class="icon-check button__icon"></span> Рецепт добавлен
                     </button>
-                </li>
+                {% else %}
+                    <button class="button button_style_light-blue"
+                        name="purchpurchases" data-out><span
+                        class="icon-plus button__icon"></span>Добавить в покупки
+                    </button>
+                {% endif %}
                 {% if user != recipe.author %}
                     <li class="single-card__item">
                         {% if is_following %}
