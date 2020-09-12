@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 
 from recipes.models import Recipe
-from .models import Favorite, Follow
+from .models import Favorite, Follow, Purchase
 
 
 class FavoriteRecipeListView(LoginRequiredMixin, ListView):
@@ -17,6 +17,8 @@ class FavoriteRecipeListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tags'] = self.request.GET.get('tags', '')
+        purchases = Purchase.objects.filter(user=self.request.user).values_list('recipe', flat=True)
+        context['purchases'] = purchases
         return context
 
     def get_queryset(self):
@@ -41,8 +43,9 @@ class AuthorRecipeListView(ListView):
 
         if self.request.user.is_authenticated:
             favorites = [e[0] for e in Favorite.objects.filter(user=self.request.user).values_list('recipe')]
-            is_following = Follow.objects.filter(user=self.request.user,
-                                                 following=self.kwargs.get('pk')).exists()
+            purchases = Purchase.objects.filter(user=self.request.user).values_list('recipe', flat=True)
+            is_following = Follow.objects.filter(user=self.request.user, following=self.kwargs.get('pk')).exists()
+            context['purchases'] = purchases
             context['is_following'] = is_following
             context['favorites'] = favorites
 

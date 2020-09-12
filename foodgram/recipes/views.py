@@ -9,7 +9,7 @@ from .forms import RecipeCreationForm
 from .models import Recipe
 from .mixins import RecipeAuthorOnlyMixin
 
-from accounts.models import Favorite, Follow
+from accounts.models import Favorite, Follow, Purchase
 
 
 class RecipeCreationView(LoginRequiredMixin, FormView):
@@ -38,8 +38,10 @@ class RecipeListView(ListView):
         context = super().get_context_data(**kwargs)
 
         if self.request.user.is_authenticated:
-            favorites = [e[0] for e in Favorite.objects.filter(user=self.request.user).values_list('recipe')]
+            favorites = Favorite.objects.filter(user=self.request.user).values_list('recipe', flat=True)
             context['favorites'] = favorites
+            purchases = Purchase.objects.filter(user=self.request.user).values_list('recipe', flat=True)
+            context['purchases'] = purchases
 
         context['tags'] = self.request.GET.get('tags', '')
 

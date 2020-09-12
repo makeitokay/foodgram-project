@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from recipes.models import Ingredient
-from accounts.models import Favorite, Follow
+from accounts.models import Favorite, Follow, Purchase
 
 
 class IngredientListSerializer(serializers.ModelSerializer):
@@ -38,4 +38,17 @@ class FollowSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Following already exists")
         if user == value:
             raise serializers.ValidationError("You can't follow to yourself")
+        return value
+
+
+class PurchaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Purchase
+        fields = ('user', 'recipe')
+        read_only_fields = ('user',)
+
+    def validate_recipe(self, value):
+        user = self.context['request'].user
+        if Purchase.objects.filter(user=user, recipe=value).exists():
+            return serializers.ValidationError('Purchase already exists')
         return value
