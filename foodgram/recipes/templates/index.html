@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load get_tags_param %}
+{% load cache %}
 
 {% block title %} Рецепты {% endblock %}
 {% block styles %} <link rel="stylesheet" href="{% static 'pages/index.css' %}"> {% endblock %}
@@ -11,11 +12,15 @@
     <h1 class="main__title">Рецепты</h1>
     {% include 'tags_filter.html' %}
 </div>
+
+{% cache 60 index_recipes %}
 <div class="card-list">
     {% for recipe in recipes %}
     {% include 'recipe.html' with recipe=recipe %}
     {% endfor %}
 </div>
+{% endcache %}
+
 {% if is_paginated %}
 {% include 'pagination.html' %}
 {% endif %}
