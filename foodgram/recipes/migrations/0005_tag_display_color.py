@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('recipes', '0004_auto_20200905_2238'),
+        ("recipes", "0004_auto_20200905_2238"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tag',
-            name='display_color',
-            field=models.CharField(default='black', max_length=30),
+            model_name="tag",
+            name="display_color",
+            field=models.CharField(default="black", max_length=30),
             preserve_default=False,
         ),
     ]

@@ -11,9 +11,9 @@ class FoodgramLoginView(LoginView):
 
 class RegistrationView(FormView):
     form_class = FoodgramUserCreationForm
-    template_name = 'registration/signup.html'
+    template_name = "registration/signup.html"
     redirect_authenticated_user = True
-    success_url = '/'
+    success_url = "/"
 
     def form_valid(self, form):
         form.save()

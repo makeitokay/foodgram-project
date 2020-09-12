@@ -6,13 +6,13 @@ from accounts.models import Favorite
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author')
-    readonly_fields = ('favorite_counter',)
-    list_filter = ('name', 'author', 'tags')
-    search_fields = ('name',)
+    list_display = ("name", "author")
+    readonly_fields = ("favorite_counter",)
+    list_filter = ("name", "author", "tags")
+    search_fields = ("name",)
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('author')
+        return super().get_queryset(request).select_related("author")
 
     def favorite_counter(self, obj):
         return obj.favorite_objects.count()
@@ -20,9 +20,9 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ('name', 'unit')
-    list_filter = ('name',)
-    search_fields = ('name',)
+    list_display = ("name", "unit")
+    list_filter = ("name",)
+    search_fields = ("name",)
 
 
 admin.site.register(RecipeIngredients)

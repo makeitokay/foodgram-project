@@ -7,7 +7,7 @@ class RecipeAuthorOnlyMixin(AccessMixin):
     """Verify that the current user is `author` of requested object."""
 
     def dispatch(self, request, *args, **kwargs):
-        slug = kwargs.get('slug')
+        slug = kwargs.get("slug")
         user = request.user
         try:
             Recipe.objects.get(slug=slug, author=user)

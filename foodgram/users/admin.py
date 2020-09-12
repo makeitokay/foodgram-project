@@ -7,4 +7,4 @@ admin.site.unregister(User)
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    list_filter = ('email', 'username')
+    list_filter = ("email", "username")

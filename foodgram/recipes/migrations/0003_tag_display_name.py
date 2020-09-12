@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('recipes', '0002_auto_20200904_2310'),
+        ("recipes", "0002_auto_20200904_2310"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tag',
-            name='display_name',
+            model_name="tag",
+            name="display_name",
             field=models.CharField(default=None, max_length=30),
             preserve_default=False,
         ),

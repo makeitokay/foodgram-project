@@ -14,8 +14,12 @@ class Ingredient(models.Model):
 
 class RecipeIngredients(models.Model):
     amount = models.DecimalField(max_digits=7, decimal_places=2, null=True)
-    ingredient = models.ForeignKey('Ingredient', on_delete=models.CASCADE, related_name='ingredient_amounts')
-    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, related_name='ingredient_amounts')
+    ingredient = models.ForeignKey(
+        "Ingredient", on_delete=models.CASCADE, related_name="ingredient_amounts"
+    )
+    recipe = models.ForeignKey(
+        "Recipe", on_delete=models.CASCADE, related_name="ingredient_amounts"
+    )
 
 
 class Tag(models.Model):
@@ -28,11 +32,7 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
-    TAG_CHOICES = (
-        (0, 'Завтрак'),
-        (1, 'Обед'),
-        (2, 'Ужин')
-    )
+    TAG_CHOICES = ((0, "Завтрак"), (1, "Обед"), (2, "Ужин"))
 
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -41,18 +41,21 @@ class Recipe(models.Model):
         related_name="recipes",
     )
     name = models.CharField(max_length=60)
-    photo = models.ImageField(upload_to='recipes/', default='recipes/default.png', null=False)
+    photo = models.ImageField(
+        upload_to="recipes/", default="recipes/default.png", null=False
+    )
     description = models.TextField()
-    ingredients = models.ManyToManyField('Ingredient', related_name='recipes',
-                                         through='RecipeIngredients')
-    tags = models.ManyToManyField('Tag', related_name='recipes')
+    ingredients = models.ManyToManyField(
+        "Ingredient", related_name="recipes", through="RecipeIngredients"
+    )
+    tags = models.ManyToManyField("Tag", related_name="recipes")
     cooking_time = models.IntegerField()
     slug = models.SlugField(unique=True, null=False)
 
     @staticmethod
     def filter_by_tags(tags):
         if tags:
-            queryset = Recipe.objects.filter(tags__name__in=tags.split(',')).distinct()
+            queryset = Recipe.objects.filter(tags__name__in=tags.split(",")).distinct()
         else:
             queryset = Recipe.objects.all()
         return queryset
@@ -70,13 +73,13 @@ class Recipe(models.Model):
                 self.tags.add(tag)
 
         # Сначала получаем имена ингредиентов, затем вытащим объекты
-        ingredients = filter_by_key(form_data, 'nameIngredient')
+        ingredients = filter_by_key(form_data, "nameIngredient")
         ingredient_objects = Ingredient.objects.filter(name__in=ingredients).all()
         # В исходном списке имен заменим все имена на объекты
         for obj in ingredient_objects:
             ingredients[ingredients.index(obj.name)] = obj
         # Теперь вытащим значения количества для ингредиентов
-        values = filter_by_key(form_data, 'valueIngredient')
+        values = filter_by_key(form_data, "valueIngredient")
         # И установим соответствие между ингредиентом и количеством
         items = zip(ingredients, values)
         # p.s.: приведенная выше схема нужна для того,
@@ -86,9 +89,11 @@ class Recipe(models.Model):
         for ingredient, amount in items:
             recipe_ingredients.append(
                 RecipeIngredients(
-                    amount=round(float(amount.replace(',', '.')), 2) if amount else None,
+                    amount=round(float(amount.replace(",", ".")), 2)
+                    if amount
+                    else None,
                     recipe=self,
-                    ingredient=ingredient
+                    ingredient=ingredient,
                 )
             )
         # Также одним запросом создаем все ингредиенты нашего рецепта

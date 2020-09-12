@@ -7,23 +7,33 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('recipes', '0006_auto_20200906_0056'),
+        ("recipes", "0006_auto_20200906_0056"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='recipe',
-            name='photo',
-            field=models.ImageField(default='recipes/default.png', upload_to='recipes/'),
+            model_name="recipe",
+            name="photo",
+            field=models.ImageField(
+                default="recipes/default.png", upload_to="recipes/"
+            ),
         ),
         migrations.AlterField(
-            model_name='recipeingredients',
-            name='ingredient',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ingredient_amounts', to='recipes.ingredient'),
+            model_name="recipeingredients",
+            name="ingredient",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="ingredient_amounts",
+                to="recipes.ingredient",
+            ),
         ),
         migrations.AlterField(
-            model_name='recipeingredients',
-            name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ingredient_amounts', to='recipes.recipe'),
+            model_name="recipeingredients",
+            name="recipe",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="ingredient_amounts",
+                to="recipes.recipe",
+            ),
         ),
     ]
