@@ -6,4 +6,5 @@ urlpatterns = [
     path('<int:pk>/', views.AuthorRecipeListView.as_view(), name='author-recipe-list'),
     path('following/', views.FollowingAuthorsListView.as_view(), name='following-list'),
     path('purchases/', views.PurchasesListView.as_view(), name='purchase-list'),
+    path('purchases/download', views.DownloadPurchaseListView.as_view(), name='purchase-list-download'),
 ]

@@ -9,7 +9,7 @@
     <h1 class="main__title">{{ author.username }}</h1>
     {% include 'tags_filter.html' %}
 </div>
-{% if user != author %}
+{% if user != author and user.is_authenticated %}
 <div class="author-subscribe" data-author="{{ author.id }}">
     <p style="padding: 0 0 2em 0;">
         {% if is_following %}

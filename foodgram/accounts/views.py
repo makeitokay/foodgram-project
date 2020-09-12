@@ -1,8 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
+from django.http import FileResponse, HttpResponse
 from django.views.generic import ListView
+from django.views import View
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+
+import io
 
 from recipes.models import Recipe
 from .models import Favorite, Follow, Purchase
@@ -85,3 +89,32 @@ class PurchasesListView(LoginRequiredMixin, ListView):
         recipes_id = Purchase.objects.filter(user=self.request.user).values_list('recipe', flat=True)
         recipes = Recipe.objects.filter(pk__in=recipes_id).all()
         return recipes
+
+
+class DownloadPurchaseListView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        recipes_id = Purchase.objects.filter(user=self.request.user).values_list('recipe', flat=True)
+        recipes = Recipe.objects.filter(pk__in=recipes_id).prefetch_related('ingredient_amounts').all()
+        ingredients = {}
+        ingredients_by_taste = []
+        for recipe in recipes:
+            for obj in recipe.ingredient_amounts.select_related('ingredient').all():
+                ing = obj.ingredient
+                if ing.unit == 'по вкусу':
+                    ingredients_by_taste.append(ing.name)
+                    continue
+                if ing.name not in ingredients:
+                    ingredients[ing.name] = {'unit': ing.unit, 'amount': float(obj.amount)}
+                    continue
+                ingredients[ing.name]['amount'] += float(obj.amount)
+        output = ""
+        for k, v in ingredients.items():
+            output += f"{k} - {v['amount']} {v['unit']}.\n"
+        output += ', '.join(ingredients_by_taste) + " - по вкусу\n\n"
+        output += "Список скачан с помощью продуктового помощника Foodgram."
+
+        filename = 'result.txt'
+        response = HttpResponse(output, content_type='text/plain')
+        response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+
+        return response
