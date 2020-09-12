@@ -104,7 +104,8 @@ class DownloadPurchaseListView(LoginRequiredMixin, View):
         output = ""
         for k, v in ingredients.items():
             output += f"{k} - {v['amount']} {v['unit']}.\n"
-        output += ', '.join(ingredients_by_taste) + " - по вкусу\n\n"
+        if ingredients_by_taste:
+            output += ', '.join(ingredients_by_taste) + " - по вкусу\n\n"
         output += "Список скачан с помощью продуктового помощника Foodgram."
 
         filename = 'result.txt'
