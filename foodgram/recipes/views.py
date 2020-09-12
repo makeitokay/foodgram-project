@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import FormView, ListView, UpdateView, DetailView
 from django.views import View
+from django.core.cache import cache
 
 from .forms import RecipeCreationForm
 from .models import Recipe
@@ -48,8 +48,9 @@ class RecipeListView(ListView):
 
     def get_queryset(self):
         tags = self.request.GET.get('tags', '')
-        queryset = Recipe.filter_by_tags(tags)
-        return queryset.order_by('-id').select_related('author').prefetch_related('tags').all()
+
+        queryset = Recipe.filter_by_tags(tags).order_by('-id').select_related('author').prefetch_related('tags').all()
+        return queryset
 
 
 class RecipeUpdateView(LoginRequiredMixin, RecipeAuthorOnlyMixin, UpdateView):

@@ -13,13 +13,11 @@
     {% include 'tags_filter.html' %}
 </div>
 
-{% cache 60 index_recipes %}
 <div class="card-list">
     {% for recipe in recipes %}
     {% include 'recipe.html' with recipe=recipe %}
     {% endfor %}
 </div>
-{% endcache %}
 
 {% if is_paginated %}
 {% include 'pagination.html' %}
