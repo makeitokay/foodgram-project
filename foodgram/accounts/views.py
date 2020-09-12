@@ -74,3 +74,14 @@ class FollowingAuthorsListView(LoginRequiredMixin, ListView):
         following = Follow.objects.filter(user=self.request.user).values_list('following', flat=True)
         authors = User.objects.filter(pk__in=following).annotate(recipe_count=Count('recipes') - 3).all()
         return authors
+
+
+class PurchasesListView(LoginRequiredMixin, ListView):
+    model = Recipe
+    context_object_name = 'purchases'
+    template_name = 'shopList.html'
+
+    def get_queryset(self):
+        recipes_id = Purchase.objects.filter(user=self.request.user).values_list('recipe', flat=True)
+        recipes = Recipe.objects.filter(pk__in=recipes_id).all()
+        return recipes
