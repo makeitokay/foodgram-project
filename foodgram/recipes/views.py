@@ -1,10 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import FormView, ListView, UpdateView, DetailView
 from django.views import View
-from django.core.cache import cache
 
 from .forms import RecipeCreationForm
 from .models import Recipe
@@ -49,13 +47,13 @@ class RecipeListView(ListView):
     def get_queryset(self):
         tags = self.request.GET.get("tags", "")
 
-        queryset = (
-            Recipe.filter_by_tags(tags)
-            .order_by("-id")
-            .select_related("author")
-            .prefetch_related("tags")
-            .all()
-        )
+        queryset = Recipe.objects.filter_by_tags(
+            tags
+        ).select_related(
+            "author"
+        ).prefetch_related(
+            "tags"
+        ).all()
         return queryset
 
 
@@ -110,10 +108,8 @@ class RecipeDetailView(DetailView):
         return context
 
 
-class RecipeDeleteView(LoginRequiredMixin, View):
+class RecipeDeleteView(LoginRequiredMixin, RecipeAuthorOnlyMixin, View):
     def get(self, request, *args, **kwargs):
         recipe = get_object_or_404(Recipe, slug=kwargs.get("slug"))
-        if recipe.author != request.user:
-            raise PermissionDenied()
         recipe.delete()
-        return redirect(reverse("recipe-list"))
+        return redirect("recipe-list")

@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% load static %}
-{% load order_by %}
 
 {% block title %} Мои подписки {% endblock %}
 {% block styles %} <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}"> {% endblock %}
@@ -18,7 +17,7 @@
     </div>
     <div class="card-user__body">
         <ul class="card-user__items">
-            {% for recipe in author.recipes.all|order_by:"-id"|slice:"3" %}
+            {% for recipe in author.recipes.all|slice:"3" %}
             <li class="card-user__item">
                 <div class="recipe">
                     <img src="{{ recipe.photo.url }}" alt="какой-то-текст" class="recipe__image">

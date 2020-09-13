@@ -29,9 +29,6 @@ class IngredientListView(ListAPIView):
 class CreateFavoriteView(CreateAPIView):
     serializer_class = FavoriteSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
 
 class DeleteFavoriteView(APIView):
     def delete(self, request, pk):
@@ -43,9 +40,6 @@ class DeleteFavoriteView(APIView):
 class CreateFollowView(CreateAPIView):
     serializer_class = FollowSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
 
 class DeleteFollowView(APIView):
     def delete(self, request, pk):
@@ -56,9 +50,6 @@ class DeleteFollowView(APIView):
 
 class CreatePurchaseView(CreateAPIView):
     serializer_class = PurchaseSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
 
 
 class DeletePurchaseView(APIView):

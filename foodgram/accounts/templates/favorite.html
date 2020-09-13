@@ -3,33 +3,34 @@
 {% load static %}
 
 {% block title %} Избранное {% endblock %}
-{% block styles %}
-<link rel="stylesheet" href="{% static 'pages/index.css' %}"> {% endblock %}
+
+{% block styles %} <link rel="stylesheet" href="{% static 'pages/index.css' %}"> {% endblock %}
+
 {% block content %}
-{% csrf_token %}
-<div class="main__header">
-    <h1 class="main__title">Избранное</h1>
-    {% include 'tags_filter.html' %}
-</div>
-<div class="card-list">
-    {% for recipe in recipes %}
-    {% include 'recipe.html' with recipe=recipe all_favorite=True %}
-    {% endfor %}
-</div>
-{% if is_paginated %}
-{% include 'pagination.html' %}
-{% endif %}
+    {% csrf_token %}
+    <div class="main__header">
+        <h1 class="main__title">Избранное</h1>
+        {% include 'tags_filter.html' %}
+    </div>
+    <div class="card-list">
+        {% for recipe in recipes %}
+            {% include 'recipe.html' with recipe=recipe all_favorite=True %}
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+        {% include 'pagination.html' %}
+    {% endif %}
 {% endblock %}
 
 {% block js %}
-<script src="{% static 'js/components/MainCards.js' %}"></script>
+    <script src="{% static 'js/components/MainCards.js' %}"></script>
 
-<script src="{% static 'js/components/Purchpurachases.js' %}"></script>
-<script src="{% static 'js/components/Favorites.js' %}"></script>
+    <script src="{% static 'js/components/Purchpurachases.js' %}"></script>
+    <script src="{% static 'js/components/Favorites.js' %}"></script>
 
-<script src="{% static 'js/components/CardList.js' %}"></script>
-<script src="{% static 'js/components/Header.js' %}"></script>
+    <script src="{% static 'js/components/CardList.js' %}"></script>
+    <script src="{% static 'js/components/Header.js' %}"></script>
 
-<script src="{% static 'js/api/Api.js' %}"></script>
-<script src="{% static 'js/favorite.js' %}"></script>
+    <script src="{% static 'js/api/Api.js' %}"></script>
+    <script src="{% static 'js/favorite.js' %}"></script>
 {% endblock %}
