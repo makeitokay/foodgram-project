@@ -17,16 +17,16 @@
             <label for="id_first_name" class="form__label">Имя</label>
             <div class="form__field-group">
                 <input type="text" name="first_name" id="id_first_name"
-                       class="form__input">
-                <span class="form__error"></span>
+                       class="form__input" required>
+                <span class="form__error">{{ form.errors.first_name }}</span>
             </div>
         </div>
         <div class="form__group">
             <label for="id_last_name" class="form__label">Фамилия</label>
             <div class="form__field-group">
                 <input type="text" name="last_name" id="id_last_name"
-                       class="form__input">
-                <span class="form__error"></span>
+                       class="form__input" required>
+                <span class="form__error">{{ form.errors.last_name }}</span>
             </div>
         </div>
         <div class="form__group">
@@ -34,11 +34,8 @@
                 пользователя</label>
             <div class="form__field-group">
                 <input type="text" name="username" id="id_username"
-                       class="form__input">
-                {% if form.errors %}
-                <span class="form__error">Имя пользователя и пароль не совпадают. Введите правильные данные.
-                    {% endif %}
-                    </span>
+                       class="form__input" required>
+                <span class="form__error">{{ form.errors.username }}</span>
             </div>
         </div>
         <div class="form__group">
@@ -46,16 +43,16 @@
                 почты</label>
             <div class="form__field-group">
                 <input type="email" name="email" id="id_email"
-                       class="form__input">
-                <span class="form__error"></span>
+                       class="form__input" required>
+                <span class="form__error">{{ form.errors.email }}</span>
             </div>
         </div>
         <div class="form__group">
             <label for="id_password1" class="form__label">Пароль</label>
             <div class="form__field-group">
                 <input type="password" name="password1" id="id_password1"
-                       class="form__input">
-                <span class="form__error"></span>
+                       class="form__input" required>
+                <span class="form__error">{{ form.errors.password1 }}</span>
             </div>
         </div>
         <div class="form__group">
@@ -63,8 +60,8 @@
                 раз</label>
             <div class="form__field-group">
                 <input type="password" name="password2" id="id_password2"
-                       class="form__input">
-                <span class="form__error"></span>
+                       class="form__input" required>
+                <span class="form__error">{{ form.errors.password2 }}</span>
             </div>
         </div>
         <div class="form__footer">
