@@ -33,6 +33,7 @@ jobs:
         uses: docker/build-push-action@v1
         with:
           dockerfile: ./foodgram/Dockerfile
+          path: ./foodgram
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: makeitokay/foodgram
