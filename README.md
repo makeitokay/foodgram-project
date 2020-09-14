@@ -1,3 +1,5 @@
+![Foodgram](https://github.com/makeitokay/foodgram-project/workflows/Foodgram%20Main%20Workflow/badge.svg)
+
 # Продуктовый помощник Foodgram
 
 Foodgram - это сервис для настоящих кулинаров и гурманов! Здесь вы можете:
